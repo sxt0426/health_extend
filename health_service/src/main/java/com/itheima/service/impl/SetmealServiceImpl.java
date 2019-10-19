@@ -81,6 +81,7 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Override
     public List<Setmeal> findAll() {
+        System.out.println("从数据库查询所有套餐");
         return setmealDao.findAll();
     }
 
