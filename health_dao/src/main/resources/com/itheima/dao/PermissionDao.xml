@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.PermissionDao">
+    <!--查询-->
+    <select id="findByRoleId" parameterType="int" resultType="com.itheima.pojo.Permission">
+        SELECT p.* FROM t_permission p INNER JOIN t_role_permission rp ON p.id=rp.permission_id WHERE role_id=#{id}
+    </select>
+</mapper>

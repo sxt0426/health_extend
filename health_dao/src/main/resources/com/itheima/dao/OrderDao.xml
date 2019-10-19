@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.OrderDao">
+
+    <resultMap id="baseResultMap" type="com.itheima.pojo.Order">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="orderDate" property="orderDate"/>
+        <result column="orderType" property="orderType"/>
+        <result column="orderStatus" property="orderStatus"/>
+        <result column="setmeal_id" property="setmealId"/>
+    </resultMap>
+
+    <!--查询预约信息-->
+    <select id="findByCondition" parameterType="com.itheima.pojo.Order" resultMap="baseResultMap">
+        select * from t_order
+        <where>
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="memberId != null">
+            and member_id = #{memberId}
+        </if>
+        <if test="orderDate != null">
+            and orderDate = #{orderDate}
+        </if>
+        <if test="orderType != null">
+            and orderType = #{orderType}
+        </if>
+        <if test="orderStatus != null">
+            and orderStatus = #{orderStatus}
+        </if>
+        <if test="setmealId != null">
+            and setmeal_id = #{setmealId}
+        </if>
+        </where>
+    </select>
+
+    <!--新增-->
+    <insert id="add" parameterType="com.itheima.pojo.Order"  useGeneratedKeys="true" keyProperty="id">
+        insert into
+      		t_order
+      	(member_id,orderDate,orderType,orderStatus,setmeal_id)
+        	values
+      	(#{memberId},#{orderDate},#{orderType},#{orderStatus},#{setmealId})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="hashmap">
+      SELECT m.`name` as member,s.`name` as setmeal,o.orderType as orderType,o.orderDate  as orderDate FROM t_order o INNER JOIN t_member m ON o.member_id=m.id
+      INNER JOIN t_setmeal s ON o.setmeal_id=s.id WHERE o.id=#{id}
+    </select>
+
+    <select id="getSetmealReport" resultType="map">
+        SELECT COUNT(o.id) as 'value',(SELECT s.name FROM t_setmeal s WHERE s.id= o.setmeal_id) as 'name' FROM t_order o GROUP BY o.setmeal_id
+    </select>
+
+    <select id="findCountByDate" parameterType="string" resultType="int">
+        SELECT count(*) FROM t_order WHERE orderDate=#{date}
+    </select>
+
+    <!--大于某个日期的预约单数量-->
+    <select id="findByCountAfterDate" parameterType="string" resultType="int">
+        SELECT count(*) FROM t_order WHERE orderDate &gt;=#{date}
+    </select>
+
+    <select id="findVisitCountByDate" parameterType="string" resultType="int">
+         SELECT count(*) FROM t_order WHERE orderDate=#{date} AND orderStatus='已到检'
+    </select>
+
+    <select id="findVisitCountByAfterDate" parameterType="string" resultType="int">
+         SELECT count(*) FROM t_order WHERE orderDate &gt;=#{date} AND orderStatus='已到检'
+    </select>
+
+    <select id="hotSetmeal" resultType="map">
+      SELECT count(id) setmeal_count  ,(SELECT name FROM t_setmeal s WHERE s.id=o.setmeal_id LIMIT 1) as name,(SELECT COUNT(id)/(select count(id) from t_order)) as proportion FROM t_order o GROUP BY o.setmeal_id  ORDER BY COUNT(id) DESC limit 3
+    </select>
+
+</mapper>

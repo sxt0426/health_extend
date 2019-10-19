@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://code.alibabatech.com/schema/dubbo
+						http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context.xsd
+                          http://www.springframework.org/schema/security
+                          http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+    <context:component-scan base-package="com.itheima.controller"></context:component-scan>
+    <context:annotation-config></context:annotation-config>
+    <!--静态资源访问
+    security=none 不进行认证
+    pattern 访问路径
+    -->
+    <security:http security="none" pattern="/js/**"/>
+    <security:http security="none" pattern="/css/**"/>
+    <security:http security="none" pattern="/img/**"/>
+    <!--如果你配置的是拦截所有请求，那么登录页面需要放行-->
+    <security:http security="none" pattern="/login.html"/>
+
+    <!--1.http拦截请求配置
+    auto-config 默认配置
+              true 框架默认提供 登录页面、登出操作
+              false 用户自定义登录页面、登出操作，注意：必须提供登录页面表单，如果没有提供登录表单，程序报错
+    use-expressions 使用表达式 针对intercept-url标签的access属性，也就是说access的属性值是一个 表达式
+    -->
+    <security:http auto-config="true" use-expressions="true">
+
+        <!--2.intercept-url定义拦截的请求地址
+        pattern 请求路径表达式 /**(所有请求路径)
+        access 访问pattern指定的路径，需要具备的条件 isAuthenticated（登录成功）
+        -->
+        <security:intercept-url pattern="/**" access="isAuthenticated()"/>
+
+        <!--登录表单配置
+        username-parameter 从指定的登录页面的 哪个表单属性获取 username
+        username-parameter 从指定的登录页面的 哪个表单属性获取 password
+        default-target-url 指定登录成功之后跳转的页面
+        always-use-default-target 登录成功之后 总是向default-target-url指定的页面跳转
+        authentication-failure-url 登录失败跳转的页面
+        login-processing-url 登录请求地址
+        -->
+        <security:form-login
+            login-page="/login.html"
+            username-parameter="username"
+            password-parameter="password"
+            login-processing-url="/login.do"
+            default-target-url="/index.jsp"
+            always-use-default-target="true"
+            authentication-failure-url="/login.html"
+        />
+        <!--请求来源过滤器
+        csrf 跨站伪造请求
+        -->
+        <security:csrf disabled="true"/>
+
+        <!--退出配置
+        logout-url 发起退出请求
+        logout-success-url 退出成功跳转的页面
+        invalidate-session 清除session 清除用户认证信息
+        -->
+
+        <security:logout logout-url="/logout.do"
+                         logout-success-url="/login.html"
+                         invalidate-session="true"
+        />
+    </security:http>
+
+    <!--认证流程管理-->
+    <security:authentication-manager>
+        <!--具体的认证逻辑-->
+        <security:authentication-provider user-service-ref="userService">
+            <security:password-encoder ref="passwordEncoder"/>
+            <!--提供用户信息 用户名或密码 权限信息-->
+           <!-- <security:user-service>
+                &lt;!&ndash;{noop} 明文密码方式&ndash;&gt;
+                <security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/>
+            </security:user-service>-->
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!--配置密码器-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <!--从数据库获取用户信息-->
+    <bean id="userService" class="com.itheima.service.UserServiceImpl"/>
+
+    <!--开启注解方式权限控制-->
+    <security:global-method-security pre-post-annotations="enabled" />
+</beans>
