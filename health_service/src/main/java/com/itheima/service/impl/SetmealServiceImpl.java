@@ -45,6 +45,7 @@ public class SetmealServiceImpl implements SetmealService {
         jedisPool.getResource().sadd(RedisConstant.SETMEAL_IMG_DB,setmeal.getImg());
     }
 
+
     /**
      * 保存套餐与检查组关联信息
      * @param setmealId
@@ -63,6 +64,7 @@ public class SetmealServiceImpl implements SetmealService {
             setmealDao.setSetmealAndCheckgroup(map);
         }
     }
+
 
     @Override
     public PageResult pageQuery(Integer currentPage, Integer pageSize, String queryString) {
