@@ -12,10 +12,10 @@
         insert into
       		t_member
               (fileNumber,name,sex,idCard,phoneNumber,
-               regTime,password,email,birthday,remark)
+               regTime,password,email,birthday,remark,contactsName,contactsSex,contactsTelephone)
              values
               (#{fileNumber},#{name},#{sex},#{idCard},#{phoneNumber},
-               #{regTime},#{password},#{email},#{birthday},#{remark})
+               #{regTime},#{password},#{email},#{birthday},#{remark},#{contactsName},#{contactsSex},#{contactsTelephone})
     </insert>
 
     <select id="findCountByBeforeMonth" parameterType="string" resultType="int">
