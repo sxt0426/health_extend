@@ -45,6 +45,7 @@ public class SetmealServiceImpl implements SetmealService {
         jedisPool.getResource().sadd(RedisConstant.SETMEAL_IMG_DB, setmeal.getImg());
     }
 
+
     /**
      * 保存套餐与检查组关联信息
      *
@@ -65,6 +66,7 @@ public class SetmealServiceImpl implements SetmealService {
         }
     }
 
+
     @Override
     public PageResult pageQuery(Integer currentPage, Integer pageSize, String queryString) {
         PageHelper.startPage(currentPage, pageSize);
@@ -81,6 +83,8 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Override
     public List<Setmeal> findAll() {
+        System.out.println("从数据库查询所有套餐");
+        System.out.println("从redis中查询数据");
         return setmealDao.findAll();
     }
 

@@ -71,6 +71,9 @@ public class OrderServiceImpl implements OrderService {
             member.setPhoneNumber(telephone);
             member.setName((String) map.get("name"));
             member.setRegTime(new Date());
+            member.setContactsName((String) map.get("contactsName"));
+            member.setContactsSex((String) map.get("contactsSex"));
+            member.setContactsTelephone((String) map.get("contactsTelephone"));
 
             memberDao.add(member);
         }
@@ -89,9 +92,7 @@ public class OrderServiceImpl implements OrderService {
             return Result.error(MessageConstant.HAS_ORDERED);
         }
 
-        //5.将预约信息提交到数据库  1.预约设置（已预约人数+1） 2.t_order新增一条数据
-        orderSetting.setReservations(orderSetting.getReservations() + 1);
-        orderSettingDao.updateReservationsByDate(orderSetting);
+
 
         Order order = new Order();
         order.setSetmealId(Integer.parseInt((String) map.get("setmealId")));
@@ -101,6 +102,11 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(Order.ORDERSTATUS_NO);
 
         orderDao.add(order);
+
+
+        //5.将预约信息提交到数据库  1.预约设置（已预约人数+1） 2.t_order新增一条数据
+        orderSetting.setReservations(orderSetting.getReservations() + 1);
+        orderSettingDao.updateReservationsByDate(orderSetting);
 
         return Result.success(MessageConstant.ORDER_SUCCESS, order);
     }

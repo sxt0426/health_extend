@@ -59,7 +59,8 @@ public class OrderController {
 
         if (result.isFlag()) {
             //3.提示用户(发送短信) 预约成功
-            SMSUtils.sendShortMessage(SMSUtils.ORDER_NOTICE, telephone, "6666");
+            //SMSUtils.sendShortMessage(SMSUtils.ORDER_NOTICE, telephone, "6666");
+            int u = 1;
         }
 
         return result;

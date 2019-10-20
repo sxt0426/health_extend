@@ -46,8 +46,9 @@ public class ValidateCodeController {
 
         //3.通过aliyun短信服务发送短信
         try {
-            SMSUtils.sendShortMessage(SMSUtils.VALIDATE_CODE, telephone, code + "");
-        } catch (ClientException e) {
+            int i = 1;
+           // SMSUtils.sendShortMessage(SMSUtils.VALIDATE_CODE, telephone, code + "");
+        } catch (Exception e) {
             log.error("Aliyun send msg error.", e);
             return Result.error(MessageConstant.SEND_VALIDATECODE_FAIL);
         }
