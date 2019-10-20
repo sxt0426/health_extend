@@ -54,4 +54,8 @@ public interface OrderDao {
     Integer findVisitCountByAfterDate(String monDateStr);
 
     List<Map<String,Object>> hotSetmeal();
+
+    List<Map> getSexSetmealReport();
+
+    List<Map> getAgeSetmealReport();
 }
