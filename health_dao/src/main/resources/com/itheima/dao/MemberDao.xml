@@ -35,4 +35,9 @@
     <select id="findCountByAfterDate" parameterType="string" resultType="int">
         select count(*) from t_member WHERE regTime &gt;=#{date}
     </select>
+
+    <!--根据日期查询会员数量-->
+    <select id="findMemberCountByMonth" parameterType="string" resultType="int">
+        SELECT count(*) FROM t_member WHERE regTime BETWEEN #{monthBegin} AND #{monthEnd}
+    </select>
 </mapper>
