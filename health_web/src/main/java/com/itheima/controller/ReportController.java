@@ -48,32 +48,16 @@ public class ReportController {
      * @return
      */
     @RequestMapping("getMemberReport")
-    public Result getMemberReport() {
-        Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.MONTH, -12);//定位到一年前 从现在往前倒了12个月 2018.10
-        //1.月份数据
-        List<String> queryDataParam = new ArrayList<>();
-        //构建 从2018.10一直到2019.10的每个日期
-        for (int i = 0; i < 12; i++) {
-            instance.add(Calendar.MONTH, 1);//月份上+1， 2018.10+1
-            String date = new SimpleDateFormat("yyyy.MM").format(instance.getTime());
-            queryDataParam.add(date);
-        }
-
-        //2.通过月份查询数据
-        List<Integer> counts = null;
+    public Result getMemberReport(String[] value) {
         try {
-            counts = memberService.findCountByBeforeMonth(queryDataParam);
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("memberCount", counts);
-            map.put("months", queryDataParam);
-
-            return Result.success(MessageConstant.GET_MEMBER_NUMBER_REPORT_SUCCESS, map);
+            Map map = memberService.getMemberReport(value);
+            if (map != null) {
+                //查询成功
+                return Result.success(MessageConstant.GET_MEMBER_NUMBER_REPORT_SUCCESS, map);
+            }
         } catch (Exception e) {
-            log.error("Get memberCount error.", e);
+            log.error("Get member report error.", e);
         }
-
         return Result.error(MessageConstant.GET_MEMBER_NUMBER_REPORT_FAIL);
     }
 
