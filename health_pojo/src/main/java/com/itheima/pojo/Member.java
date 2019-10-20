@@ -17,6 +17,9 @@ public class Member implements Serializable{
     private String password;//登录密码
     private String email;//邮箱
     private Date birthday;//出生日期
+    private String contactsName;//联系人姓名
+    private String contactsSex;//联系人性别
+    private String contactsTelephone;//联系人手机
     private String remark;//备注
 
     public Integer getId() {
@@ -71,8 +74,8 @@ public class Member implements Serializable{
         return regTime;
     }
 
-    public void setRegTime(Date regtime) {
-        this.regTime = regtime;
+    public void setRegTime(Date regTime) {
+        this.regTime = regTime;
     }
 
     public String getPassword() {
@@ -97,6 +100,30 @@ public class Member implements Serializable{
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getContactsName() {
+        return contactsName;
+    }
+
+    public void setContactsName(String contactsName) {
+        this.contactsName = contactsName;
+    }
+
+    public String getContactsSex() {
+        return contactsSex;
+    }
+
+    public void setContactsSex(String contactsSex) {
+        this.contactsSex = contactsSex;
+    }
+
+    public String getContactsTelephone() {
+        return contactsTelephone;
+    }
+
+    public void setContactsTelephone(String contactsTelephone) {
+        this.contactsTelephone = contactsTelephone;
     }
 
     public String getRemark() {
