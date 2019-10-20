@@ -45,4 +45,8 @@ public interface SetmealService {
      * @return
      */
     List<Map<String,Object>> getSetmealReport();
+
+    List getSexSetmealReport();
+
+    List getAgeSetmealReport();
 }

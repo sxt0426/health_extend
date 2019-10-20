@@ -221,4 +221,36 @@ public class ReportController {
         out.close();
         workbook.close();
     }
+
+    /**
+     * 按性别分析会员人数
+     * @return
+     */
+    @RequestMapping("/getSexSetmealReport")
+    public Result getSexSetmealReport(){
+
+        try {
+            List list =  setmealService.getSexSetmealReport();
+            return new Result(true, MessageConstant.GET_SETMEAL_COUNT_REPORT_SUCCESS,list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,MessageConstant.GET_SETMEAL_COUNT_REPORT_FAIL);
+        }
+
+    }
+
+    /**
+     * 按年龄段分析会员人数
+     * @return
+     */
+    @RequestMapping("/getAgeSetmealReport")
+    public Result getAgeSetmealReport(){
+        try {
+            List list =  setmealService.getAgeSetmealReport();
+            return new Result(true, MessageConstant.GET_SETMEAL_COUNT_REPORT_SUCCESS,list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,MessageConstant.GET_SETMEAL_COUNT_REPORT_FAIL);
+        }
+    }
 }

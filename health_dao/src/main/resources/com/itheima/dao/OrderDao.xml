@@ -76,4 +76,22 @@
       SELECT count(id) setmeal_count  ,(SELECT name FROM t_setmeal s WHERE s.id=o.setmeal_id LIMIT 1) as name,(SELECT COUNT(id)/(select count(id) from t_order)) as proportion FROM t_order o GROUP BY o.setmeal_id  ORDER BY COUNT(id) DESC limit 3
     </select>
 
+    <select id="getSexSetmealReport" resultType="map">
+      SELECT COUNT(id) as value,(CASE sex WHEN 0 THEN '男' WHEN 1 THEN '女' END) as name  FROM t_member GROUP BY sex
+    </select>
+
+    <select id="getAgeSetmealReport" resultType="map">
+        select birthday  as name,count(*) as value from
+        (
+        SELECT
+        CASE
+        when birthday &gt; '2001-01-01' then '18岁以下'
+        when birthday &gt;='1989-01-01' AND birthday &lt; '2001-01-01'  then '18~30岁'
+        when birthday &gt;='1974-01-01' AND birthday &lt; '1989-01-01'  then '30~45岁'
+        when birthday &lt; '1974-01-01'  then '45岁以上'
+        END
+        as birthday from t_member m
+        )a GROUP BY birthday
+
+    </select>
 </mapper>
