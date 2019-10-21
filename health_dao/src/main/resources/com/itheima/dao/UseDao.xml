@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.UseDao">
+
+    <!--查询用户名唯一-->
+    <select id="checkUsername" parameterType="string" resultType="int">
+        SELECT count(*) FROM t_user WHERE username = #{username}
+    </select>
+
+
+    <!--添加用户-->
+    <insert id="add" parameterType="com.itheima.pojo.User">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_user(birthday,gender,username,password,remark,station,telephone)
+        VALUES (#{birthday},#{gender},#{username},#{password},#{remark},#{station},#{telephone})
+    </insert>
+
+    <!--添加角色用户关系-->
+    <insert id="addUserRole">
+        INSERT INTO t_user_role (user_id,role_id)
+        VALUES (#{user_id},#{role_id})
+    </insert>
+
+    <!--分页查询-->
+    <select id="selectByCondition" parameterType="string" resultType="com.itheima.pojo.User">
+        SELECT * FROM t_user
+        <if test="value !=null and value.length>0">
+            WHERE username=#{username}
+        </if>
+    </select>
+    <!--根据id查询-->
+    <select id="queryById" parameterType="integer" resultType="com.itheima.pojo.User">
+        SELECT * FROM t_user WHERE id =#{id}
+    </select>
+
+    <!--查询关联角色id-->
+    <select id="findmenuIds" parameterType="integer" resultType="integer">
+        SELECT role_id FROM t_user_role WHERE user_id =#{id}
+    </select>
+
+    <!--更新-->
+    <update id="edit" parameterType="com.itheima.pojo.User">
+        update t_user
+        <set>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="station != null">
+                station = #{station},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--删除中间数据-->
+    <delete id="deleteAssocation" parameterType="integer">
+        DELETE FROM t_user_role WHERE user_id=#{id}
+    </delete>
+
+    <!--删除用户-->
+    <delete id="deleteUserById" parameterType="integer">
+        DELETE FROM t_user WHERE id =#{id}
+    </delete>
+
+    <!--查询中间表-->
+    <select id="queryUserRole" parameterType="integer" resultType="int">
+        SELECT count(*) FROM t_user_role WHERE user_id =#{id}
+    </select>
+</mapper>

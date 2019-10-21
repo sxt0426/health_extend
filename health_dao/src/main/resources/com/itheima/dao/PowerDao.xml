@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.PowerDao">
+
+    <!--添加权限-->
+    <insert id="add" parameterType="com.itheima.pojo.Permission">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_permission(name,keyword,description)
+        VALUES (#{name},#{keyword},#{description})
+    </insert>
+
+    <!--添加中间表数据-->
+    <insert id="addPermisssionRole">
+        INSERT INTO t_role_permission (role_id,permission_id)
+        VALUES (#{role_id},#{permission_id})
+    </insert>
+
+    <!--分页-->
+    <select id="selectByCondition" parameterType="string" resultType="com.itheima.pojo.Permission">
+        SELECT * FROM t_permission
+        <if test="value !=null and value.length>0">
+            WHERE name=#{name} OR keyword = #{keyword}
+        </if>
+    </select>
+
+    <!--根据id查找-->
+    <select id="queryById" parameterType="integer" resultType="com.itheima.pojo.Permission">
+        SELECT * FROM t_permission WHERE id = #{id}
+    </select>
+
+    <!--查询中间表信息-->
+    <select id="findroleIds" parameterType="integer" resultType="int">
+        SELECT role_id FROM t_role_permission WHERE permission_id =#{id}
+    </select>
+
+    <!--编辑-->
+    <update id="edit" parameterType="com.itheima.pojo.Permission">
+        update t_permission
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--删除中间表-->
+    <delete id="deleteAssocation" parameterType="integer">
+         DELETE FROM t_role_permission WHERE permission_id=#{id}
+    </delete>
+
+    <!--查询权限角色关联关系-->
+    <select id="queryPermissionRoleById" parameterType="integer" resultType="int">
+        SELECT count(*) FROM t_role_permission WHERE permission_id=#{id}
+    </select>
+
+    <!--删除权限-->
+    <delete id="deleteById" parameterType="integer">
+        DELETE FROM t_permission WHERE id=#{id}
+    </delete>
+</mapper>

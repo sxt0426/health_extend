@@ -6,4 +6,79 @@
     <select id="findByUserId" parameterType="int" resultType="com.itheima.pojo.Role">
         SELECT r.* FROM t_role r INNER JOIN t_user_role ur ON r.id=ur.role_id WHERE ur.user_id=#{id}
     </select>
+
+    <!--添加角色-->
+    <insert id="add" parameterType="com.itheima.pojo.Role">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_role(name,keyword,description)
+        VALUES (#{name},#{keyword},#{description})
+    </insert>
+
+    <!--添加角色，菜单关联关系-->
+    <insert id="addRoleMenu">
+        INSERT INTO t_role_menu (role_id,menu_id)
+        VALUES (#{roleId},#{menuId})
+    </insert>
+
+    <!--分页-->
+    <select id="selectByCondition" parameterType="string" resultType="com.itheima.pojo.Role">
+        SELECT * FROM t_role
+        <if test="value !=null and value.length>0">
+            WHERE name=#{name} OR keyword = #{keyword}
+        </if>
+    </select>
+
+    <!--根据id查找role-->
+    <select id="queryById" parameterType="integer" resultType="com.itheima.pojo.Role">
+        SELECT * FROM t_role WHERE id = #{id}
+    </select>
+
+    <!--查询关联菜单id-->
+    <select id="findmenuIds" parameterType="integer" resultType="integer">
+        SELECT menu_id FROM t_role_menu WHERE role_id = #{id}
+    </select>
+
+    <!--删除role-->
+    <delete id="deleteById" parameterType="integer">
+        DELETE FROM t_role WHERE id = #{id}
+    </delete>
+
+    <!--查询role和menu关联关系-->
+    <select id="queryRoleMenuById" parameterType="integer" resultType="int">
+        SELECT count(*) FROM t_role_menu WHERE role_id =#{id}
+    </select>
+
+    <!--查询role和permission关联关系-->
+    <select id="queryRolePermissionById" parameterType="integer" resultType="int">
+        SELECT count(*) FROM t_role_permission WHERE role_id =#{id}
+    </select>
+
+    <!-- 查询所有角色-->
+    <select id="findAll" resultType="com.itheima.pojo.Role">
+        SELECT * FROM t_role
+    </select>
+
+    <!--更新-->
+    <update id="edit" parameterType="com.itheima.pojo.Role">
+        update t_role
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--删除中间数据-->
+    <delete id="deleteAssocation" parameterType="integer">
+        DELETE FROM t_role_menu WHERE role_id=#{id}
+    </delete>
 </mapper>

@@ -1,5 +1,6 @@
 package com.itheima.service;
 
+import com.itheima.entity.Result;
 import com.itheima.pojo.User;
 
 /**
@@ -13,4 +14,6 @@ public interface UserService {
      * @return
      */
     User findByUsername(String username);
+
+
 }

@@ -55,6 +55,9 @@ public interface OrderDao {
 
     List<Map<String,Object>> hotSetmeal();
 
+    //分页
+    List<Order> selectByCondition();
+
     List<Map> getSexSetmealReport();
 
     List<Map> getAgeSetmealReport();
