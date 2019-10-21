@@ -1,5 +1,6 @@
 package com.itheima.service;
 
+import com.itheima.entity.PageResult;
 import com.itheima.entity.Result;
 
 import java.util.Map; /**
@@ -20,4 +21,7 @@ public interface OrderService {
      * @return
      */
     Map findById(Integer id);
+
+    //分页
+    PageResult findPage(Integer currentPage, Integer pageSize, String queryString);
 }

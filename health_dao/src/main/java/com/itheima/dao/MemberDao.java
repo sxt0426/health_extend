@@ -1,6 +1,7 @@
 package com.itheima.dao;
 
 import com.itheima.pojo.Member;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 会员数据库操作
@@ -22,10 +23,11 @@ public interface MemberDao {
 
     /**
      * 查询某个月 之前的所有用户统计数据
-     * @param date
+     * @param monthBegin
+     * @param monthEnd
      * @return
      */
-    int findCountByBeforeMonth(String date);
+    int findMemberCountByMonth(@Param("monthBegin") String monthBegin, @Param("monthEnd") String monthEnd);
 
     /**
      * 根据注册日期查询 会员数量

@@ -1,6 +1,7 @@
 package com.itheima.service;
 
 import com.itheima.pojo.Menu;
+import com.itheima.entity.Result;
 import com.itheima.pojo.User;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface UserService {
     User findByUsername(String username);
 
     List<Menu> getMenus(String username);
+
+
 }

@@ -1,7 +1,9 @@
 package com.itheima.jobs;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.common.constant.RedisConstant;
 import com.itheima.common.utils.QiniuUtils;
+import com.itheima.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisPool;
 
@@ -12,6 +14,9 @@ public class ClearJob {
 
     @Autowired
     private JedisPool jedisPool;
+
+    @Reference
+    private JobService jobService;
 
     private void clearImg(){
         System.out.println("===定时调用开始===");
@@ -34,5 +39,10 @@ public class ClearJob {
             //删除保存在RedisConstant.SETMEAL_IMG_TMP 的图片名 filename
             jedisPool.getResource().srem(RedisConstant.SETMEAL_IMG_TMP,filename);
         }
+    }
+
+    private void deleteOrderSettingSchedule() throws Exception {
+        System.out.println("清理预约数据");
+        jobService.deleteOrderSettingSchedule();
     }
 }

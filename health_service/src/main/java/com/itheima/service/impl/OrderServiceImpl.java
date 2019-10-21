@@ -1,11 +1,14 @@
 package com.itheima.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.itheima.common.constant.MessageConstant;
 import com.itheima.common.utils.DateUtils;
 import com.itheima.dao.MemberDao;
 import com.itheima.dao.OrderDao;
 import com.itheima.dao.OrderSettingDao;
+import com.itheima.entity.PageResult;
 import com.itheima.entity.Result;
 import com.itheima.pojo.Member;
 import com.itheima.pojo.Order;
@@ -119,5 +122,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Map findById(Integer id) {
         return orderDao.findById(id);
+    }
+
+
+    //分页
+    @Override
+    public PageResult findPage(Integer currentPage, Integer pageSize, String queryString) {
+        PageHelper.startPage(currentPage, pageSize);
+        Page page = (Page) orderDao.selectByCondition();
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }

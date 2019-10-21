@@ -1,8 +1,12 @@
 package com.itheima.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.JsonObject;
 import com.itheima.common.constant.RedisConstant;
 import com.itheima.dao.OrderDao;
 import com.itheima.dao.SetmealDao;
@@ -16,6 +20,7 @@ import redis.clients.jedis.JedisPool;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 套餐业务实现
@@ -32,6 +37,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Autowired
     private OrderDao orderDao;
+
 
     @Override
     public void add(Setmeal setmeal, Integer[] checkgroupIds) {
@@ -83,9 +89,28 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Override
     public List<Setmeal> findAll() {
-        System.out.println("从数据库查询所有套餐");
-        System.out.println("从redis中查询数据");
-        return setmealDao.findAll();
+
+        List<Setmeal> setmealList = null;
+
+        //1. 先从redis中获取
+        String setmealsStr = jedisPool.getResource().get("setmealsStr");
+        if (null != setmealsStr) {
+            //将json字符串转换成集合
+             setmealList =  JSONArray.parseArray(setmealsStr,Setmeal.class);
+            return setmealList;
+        }
+
+        //2. 如果redis中没有，则从数据库中查询
+        setmealList = setmealDao.findAll();
+        if (setmealList == null) {
+            return null;
+        }
+        //将集合转换成json字符串
+        setmealsStr = JSON.toJSONString(setmealList);
+        //3. 将json字符串存入redis中
+        jedisPool.getResource().set("setmealsStr", setmealsStr);
+
+        return setmealList;
     }
 
     /**
@@ -96,7 +121,31 @@ public class SetmealServiceImpl implements SetmealService {
      */
     @Override
     public Setmeal findById(Integer id) {
-        return setmealDao.findById(id);
+
+        Setmeal setmeal = null;
+
+        //1. 先从redis中获取
+         String setmealStr = jedisPool.getResource().hget("setemalDetail",id+"");
+
+        if (null != setmealStr) {
+            //将json字符串装换成对象
+            setmeal=JSONObject.parseObject(setmealStr,Setmeal.class);
+            return setmeal;
+        }
+
+        //2. 如果redis中没有，则从数据库中查询
+        setmeal = setmealDao.findById(id);
+        if (setmeal == null) {
+            return null;
+        }
+
+        //将对象转换成字符串
+        setmealStr = JSON.toJSONString(setmeal);
+
+        //3. 将json字符串存入redis中
+        jedisPool.getResource().hset("setemalDetail",id+"",setmealStr);
+
+        return setmeal;
     }
 
     /**
@@ -113,6 +162,7 @@ public class SetmealServiceImpl implements SetmealService {
 
         return setmealCounts;
     }
+
 
     /**
      * 按性别分析会员人数
@@ -135,4 +185,5 @@ public class SetmealServiceImpl implements SetmealService {
         List<Map> list = orderDao.getAgeSetmealReport();
         return list;
     }
+
 }

@@ -76,6 +76,10 @@
       SELECT count(id) setmeal_count  ,(SELECT name FROM t_setmeal s WHERE s.id=o.setmeal_id LIMIT 1) as name,(SELECT COUNT(id)/(select count(id) from t_order)) as proportion FROM t_order o GROUP BY o.setmeal_id  ORDER BY COUNT(id) DESC limit 3
     </select>
 
+    <!--分页-->
+    <select id="selectByCondition" resultType="com.itheima.pojo.Order">
+        SELECT * FROM t_order
+    </select>
     <select id="getSexSetmealReport" resultType="map">
       SELECT COUNT(id) as value,(CASE sex WHEN 0 THEN '男' WHEN 1 THEN '女' END) as name  FROM t_member GROUP BY sex
     </select>

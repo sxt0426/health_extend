@@ -6,6 +6,7 @@ import com.itheima.dao.PermissionDao;
 import com.itheima.dao.RoleDao;
 import com.itheima.dao.UserDao;
 import com.itheima.pojo.Menu;
+import com.itheima.entity.Result;
 import com.itheima.pojo.Permission;
 import com.itheima.pojo.Role;
 import com.itheima.pojo.User;
@@ -93,4 +94,6 @@ public class UserServiceImpl implements UserService {
 
         return menuList;
     }
+
+
 }

@@ -5,9 +5,11 @@ import com.itheima.common.constant.MessageConstant;
 import com.itheima.entity.Result;
 import com.itheima.pojo.Menu;
 import com.itheima.service.UserService;
+import com.itheima.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +24,10 @@ public class UserController {
 
     private static final Logger log = Logger.getLogger(UserController.class);
 
-
     @Reference
     private UserService userService;
+
+
     /**
      * 获取登录的用户名
      *
@@ -56,4 +59,6 @@ public class UserController {
 
         return Result.error("查询菜单失败");
     }
+
+
 }
