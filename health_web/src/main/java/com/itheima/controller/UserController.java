@@ -1,21 +1,27 @@
 package com.itheima.controller;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.common.constant.MessageConstant;
 import com.itheima.entity.Result;
+import com.itheima.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 用户管理
+ * 登录管理
  */
 @RestController
 @RequestMapping("user")
 public class UserController {
 
     private static final Logger log = Logger.getLogger(UserController.class);
+
+    @Reference
+    private UserService userService;
 
 
     /**
@@ -33,4 +39,6 @@ public class UserController {
 
         return Result.error(MessageConstant.GET_USERNAME_FAIL);
     }
+
+
 }

@@ -54,4 +54,7 @@ public interface OrderDao {
     Integer findVisitCountByAfterDate(String monDateStr);
 
     List<Map<String,Object>> hotSetmeal();
+
+    //分页
+    List<Order> selectByCondition();
 }
