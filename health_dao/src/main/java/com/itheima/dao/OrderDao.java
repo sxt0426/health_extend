@@ -57,4 +57,8 @@ public interface OrderDao {
 
     //分页
     List<Order> selectByCondition();
+
+    List<Map> getSexSetmealReport();
+
+    List<Map> getAgeSetmealReport();
 }

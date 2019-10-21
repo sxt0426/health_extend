@@ -12,10 +12,10 @@
         insert into
       		t_member
               (fileNumber,name,sex,idCard,phoneNumber,
-               regTime,password,email,birthday,remark)
+               regTime,password,email,birthday,remark,contactsName,contactsSex,contactsTelephone)
              values
               (#{fileNumber},#{name},#{sex},#{idCard},#{phoneNumber},
-               #{regTime},#{password},#{email},#{birthday},#{remark})
+               #{regTime},#{password},#{email},#{birthday},#{remark},#{contactsName},#{contactsSex},#{contactsTelephone})
     </insert>
 
     <select id="findCountByBeforeMonth" parameterType="string" resultType="int">
@@ -34,5 +34,10 @@
 
     <select id="findCountByAfterDate" parameterType="string" resultType="int">
         select count(*) from t_member WHERE regTime &gt;=#{date}
+    </select>
+
+    <!--根据日期查询会员数量-->
+    <select id="findMemberCountByMonth" parameterType="string" resultType="int">
+        SELECT count(*) FROM t_member WHERE regTime BETWEEN #{monthBegin} AND #{monthEnd}
     </select>
 </mapper>

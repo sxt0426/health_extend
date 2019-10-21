@@ -3,6 +3,7 @@ package com.itheima.service;
 import com.itheima.pojo.Member;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 会员接口
@@ -24,8 +25,8 @@ public interface MemberService {
 
     /**
      * 根据月份查询，当前月份之前所有的用户数据
-     * @param queryDataParam
+     * @param value
      * @return
      */
-    List<Integer> findCountByBeforeMonth(List<String> queryDataParam);
+    Map getMemberReport(String[] value) throws Exception;
 }
