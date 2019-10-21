@@ -44,7 +44,7 @@
 <body class="hold-transition">
 <div id="app">
     <div class="content-header">
-        <h1>工作台<small>角色管理</small></h1>
+        <h1>系统设置<small>角色管理</small></h1>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>工作台</el-breadcrumb-item>
@@ -73,7 +73,6 @@
             <div class="pagination-container">
                 <!--
                 @current-change 当页码发生改变时触发方法
-
                 -->
                 <el-pagination
                         class="pagiantion"
@@ -130,7 +129,7 @@
                                             <td>
                                                 <input :id="c.id" v-model="menuIds" type="checkbox" :value="c.id">
                                             </td>
-                                            <td><label :for="c.id">{{c.name}}</label></td>
+                                            <td><label :for="c.id">{{c.title}}</label></td>
                                             <td><label :for="c.id">{{c.description}}</label></td>
                                         </tr>
                                         </tbody>
@@ -192,7 +191,7 @@
                                             <td>
                                                 <input :id="c.id" v-model="menuIds" type="checkbox" :value="c.id">
                                             </td>
-                                            <td><label :for="c.id">{{c.name}}</label></td>
+                                            <td><label :for="c.id">{{c.title}}</label></td>
                                             <td><label :for="c.id">{{c.path}}</label></td>
                                             <td><label :for="c.id">{{c.description}}</label></td>
                                         </tr>
