@@ -1,6 +1,9 @@
 package com.itheima.service;
 
+import com.itheima.pojo.Menu;
 import com.itheima.pojo.User;
+
+import java.util.List;
 
 /**
  * 用户接口
@@ -13,4 +16,6 @@ public interface UserService {
      * @return
      */
     User findByUsername(String username);
+
+    List<Menu> getMenus(String username);
 }

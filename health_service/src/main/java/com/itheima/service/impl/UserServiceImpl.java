@@ -1,9 +1,11 @@
 package com.itheima.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.itheima.dao.MenuDao;
 import com.itheima.dao.PermissionDao;
 import com.itheima.dao.RoleDao;
 import com.itheima.dao.UserDao;
+import com.itheima.pojo.Menu;
 import com.itheima.pojo.Permission;
 import com.itheima.pojo.Role;
 import com.itheima.pojo.User;
@@ -11,6 +13,7 @@ import com.itheima.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +23,10 @@ import java.util.Set;
 @Service(interfaceClass = UserService.class)
 @Transactional
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private MenuDao menuDao;
+
 
     @Autowired
     UserDao userDao;
@@ -56,5 +63,34 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles);
 
         return user;
+    }
+
+    @Override
+    public List<Menu> getMenus(String username) {
+
+        List<Integer> menuIds=menuDao.findByUsername(username);
+
+        List<Menu> menuList=new ArrayList<>();
+
+        for (Integer menuId : menuIds) {
+            Menu parentMenu=menuDao.findMainMenuById(menuId);
+
+            if (parentMenu != null) {
+
+                List<Menu> children =new ArrayList<>();
+
+                for (Integer id : menuIds) {
+                   Menu childMenu = menuDao.findChildMenuById(menuId,id);
+                    if (childMenu != null) {
+                        children.add(childMenu);
+                    }
+                }
+
+                parentMenu.setChildren(children);
+                menuList.add(parentMenu);
+            }
+        }
+
+        return menuList;
     }
 }
