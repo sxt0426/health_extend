@@ -125,29 +125,27 @@ public class SetmealServiceImpl implements SetmealService {
         Setmeal setmeal = null;
 
         //1. 先从redis中获取
-        //String setmealStr = jedisPool.getResource().smembers("setmealStr");
-        /*List<String> setmealStr = jedisPool.getResource().mget("setmealStr");
+        String setmealStr = jedisPool.getResource().get("setmealStr");
+        //List<String> setmealStr = jedisPool.getResource().mget("setmealStr");
 
         if (null != setmealStr) {
             //将json字符串装换成对象
-            setmeal = (Setmeal) JSONArray.toJSON(setmealStr);
+            setmeal = JSONArray.parseObject(setmealStr,Setmeal.class);
             return setmeal;
-        }*/
-
-
+        }
 
 
         //2. 如果redis中没有，则从数据库中查询
         setmeal = setmealDao.findById(id);
-        /*if (setmeal == null) {
+        if (setmeal == null) {
             return null;
-        }*/
+        }
 
         //将对象转换成字符串
-        //setmealStr = JSON.toJSON(setmeal);
+        setmealStr = JSON.toJSONString(setmeal);
 
         //3. 将json字符串存入redis中
-        //jedisPool.getResource().mset("setmealStr",setmealStr);
+        jedisPool.getResource().set("setmealStr",setmealStr);
 
         return setmeal;
     }
